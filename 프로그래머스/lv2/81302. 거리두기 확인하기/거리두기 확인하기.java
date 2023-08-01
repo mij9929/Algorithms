@@ -57,7 +57,6 @@ class Solution {
                             if (place[r].charAt(c) == 'P' && !(i == r && j == c)) {
                                 if(isManhattanDistance(i,j,r,c) == 2) {
                                     if(!hasPartition(place,i,j,r,c)){
-                                        System.out.println(k + ": " + i + "," + j + "," + r + "," + c);
                                         return false;
                                     } 
                                 }
