@@ -2,7 +2,6 @@ import java.util.*;
 class Solution {
     public int solution(int[][] routes) {
         int answer = 0;
-        boolean[] visited = new boolean[routes[0].length];
         Arrays.sort(routes, (a,b) -> {
             return a[1] - b[1];
         });
