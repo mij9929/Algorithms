@@ -1,11 +1,12 @@
 class Solution {
-    public boolean isValid(long t, long n, int[] times){
+    public boolean check(long mid, long n, int[] times){
         long c = 0;
         for(int time : times){
-            c += t / time;
+            c += mid / time;
         }
-        return c >= n;
+        return c >= n; // mid시간동안 심사하는데 걸리는 인원
     }
+    
     public long solution(int n, int[] times) {
         long answer = 0;
         long start = 1;
@@ -14,7 +15,7 @@ class Solution {
         while(end > start){
             long mid = (start + end) / 2;
             
-            if(isValid(mid, n, times)){
+            if(check(mid, n, times)){
                 end = mid;
             } else{
                 start = mid + 1;
