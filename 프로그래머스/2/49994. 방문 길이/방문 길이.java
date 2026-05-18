@@ -10,8 +10,6 @@ class Solution {
         int x = 5;
         int y = 5;
         
-        
-        
         int len = dirs.length();
         for(int i=0; i<len; i++) {
             int[] move = move(dirs.charAt(i));
