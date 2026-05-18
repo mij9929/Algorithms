@@ -34,6 +34,6 @@ class Solution {
             }
         }
         
-        return answer.stream().sorted().mapToInt(a -> a.intValue()).toArray();
+        return answer.stream().mapToInt(a -> a.intValue()).toArray();
     }
 }
