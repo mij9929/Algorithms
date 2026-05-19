@@ -1,17 +1,1 @@
-name: dispatch_action
 
-on:
- push:
-   branches:
-     - main
-
-jobs:
- dispatch:
-   runs-on: ubuntu-latest
-   steps:
-     - name: Trigger repository dispatch
-       uses: peter-evans/repository-dispatch@v1
-       with:
-         token: ${{ secrets.GH_PAT }}
-         repository: mij9929/programmers-badge-v1
-         event-type: trigger-workflow
