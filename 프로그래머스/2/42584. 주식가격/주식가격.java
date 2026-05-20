@@ -6,7 +6,7 @@ class Solution {
         int[] answer = new int[len];
         Stack<Integer> stack = new Stack<>();
         
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++) { // 일단 도중에 떨어지는 애들 계산
             int current = i; 
             while(true) {
                 if(stack.isEmpty()) break;
@@ -20,7 +20,7 @@ class Solution {
             stack.push(current);
         }
         
-        while(!stack.isEmpty()) {
+        while(!stack.isEmpty()) { // 끝까지 안떨어지는 애들 pop
             answer[stack.peek()] = len - stack.peek() - 1;
             stack.pop();
         }
