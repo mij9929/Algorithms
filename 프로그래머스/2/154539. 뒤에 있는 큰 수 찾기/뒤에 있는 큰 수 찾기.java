@@ -4,14 +4,21 @@ class Solution {
     public int[] solution(int[] numbers) {
         int[] answer = new int[numbers.length];
         Stack<Integer> stack = new Stack<>();
-        stack.push(0);
-        for(int i=0; i<numbers.length; i++){
-            answer[i] = -1; // -1로 초기화
-            while(!stack.isEmpty() && numbers[stack.peek()] < numbers[i]){
-                answer[stack.pop()] = numbers[i];
+        for(int i=0; i<numbers.length; i++) {
+            int current = i;
+            
+            while(!stack.isEmpty() && numbers[stack.peek()] < numbers[current]) {
+                int pop = stack.pop();
+                answer[pop] = numbers[current];
             }
-            stack.push(i);
+            stack.push(current);
         }
+        
+        while(!stack.isEmpty()) {
+            int pop = stack.pop();
+            answer[pop] = -1;
+        }
+        
         return answer;
     }
 }
