@@ -56,7 +56,10 @@ class Solution {
         
         // 장르 내에서 재생 횟수 정렬
         for(Genre g : list) {
-            g.musics.sort((a,b) -> Integer.compare(b.count, a.count));
+            g.musics.sort((a,b) -> {
+                if(a.count == b.count) return Integer.compare(a.index, b.index);
+                else return Integer.compare(b.count, a.count);
+            });
             if(g.musics.size() == 1) {
                 answer.add(g.musics.get(0).index);
             } else {
