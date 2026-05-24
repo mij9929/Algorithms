@@ -16,9 +16,9 @@ class Solution {
                 board[map.get(sender)][map.get(receiver)]++;
                 board[id_list.length][map.get(receiver)]++;
             }
-            
+
         }
-             
+
         for(int i=0; i<id_list.length; i++){
             if(board[id_list.length][i] >= k){
                 for(int j=0; j<id_list.length; j++){
@@ -26,7 +26,7 @@ class Solution {
                 }
             }
         }
-        
+
         return answer;
     }
 }
@@ -37,5 +37,3 @@ class Solution {
 // apeach 1    1    0     0
 // neo  
 //        1    2    0     2
-         
-         
