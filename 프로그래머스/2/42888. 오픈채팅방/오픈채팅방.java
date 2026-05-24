@@ -8,13 +8,7 @@ class Solution {
         for(String r : record) {
             String[] split = r.split(" ");
             String command = split[0];
-            if(command.equals("Enter")) {
-                String uid = split[1];
-                String nickname = split[2];
-                nameMap.put(uid, nickname);
-            }
-            
-            if(command.equals("Change")) {
+            if(command.equals("Enter") || command.equals("Change")) {
                 String uid = split[1];
                 String nickname = split[2];
                 nameMap.put(uid, nickname);
