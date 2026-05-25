@@ -2,38 +2,41 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] id_list, String[] report, int k) {
+        
         int[] answer = new int[id_list.length];
-        int[][] board = new int[id_list.length + 1][id_list.length];
-        HashMap<String, Integer> map = new HashMap<String, Integer>();
-        for(int i=0; i<id_list.length; i++){
-            map.put(id_list[i], i);
+        
+        Set<String> reportSet = new HashSet<>();
+        for(String r : report) {
+            reportSet.add(r);
         }
-        for(int i=0; i<report.length; i++){
-            String[] split = report[i].split(" ");
+        
+        Map<String, Integer> userMap = new HashMap<>(); // User별 Index map
+        for (int i = 0; i < id_list.length; i++) {
+            userMap.put(id_list[i], i);
+        }
+        
+        Map<String, Integer> reportCountMap = new HashMap<>(); // User별 신고당한 횟수
+        
+        for(String r: reportSet) {
+            String[] split = r.split(" ");
+            
+            String receiver = split[1];
+            
+            reportCountMap.put(receiver, reportCountMap.getOrDefault(receiver, 0) + 1);
+        }
+        
+         
+        for(String r: reportSet) {
+            String[] split = r.split(" ");
+            
             String sender = split[0];
             String receiver = split[1];
-            if(board[map.get(sender)][map.get(receiver)] == 0){
-                board[map.get(sender)][map.get(receiver)]++;
-                board[id_list.length][map.get(receiver)]++;
-            }
-
-        }
-
-        for(int i=0; i<id_list.length; i++){
-            if(board[id_list.length][i] >= k){
-                for(int j=0; j<id_list.length; j++){
-                    if(board[j][i] >= 1) answer[j]++;
-                }
+            
+            if(reportCountMap.get(receiver) >= k) {
+                answer[userMap.get(sender)]++;
             }
         }
-
+        
         return answer;
     }
 }
-
-//      muzi frodo apeach neo
-// muzi   0    1    0     1    
-// frodo  0    0    0     1 
-// apeach 1    1    0     0
-// neo  
-//        1    2    0     2
