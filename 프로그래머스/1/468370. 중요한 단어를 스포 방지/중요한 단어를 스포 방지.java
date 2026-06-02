@@ -4,6 +4,7 @@ class Word {
     public String word;
     public int start;
     public int end;
+    public boolean spoiler;
 
     public Word(String word, int start, int end) {
         this.word = word;
@@ -28,7 +29,7 @@ class Solution {
                 isSpoiler[i] = true;
             }
         }
-        
+
         StringBuilder sb = new StringBuilder();
         int start = 0;
 
@@ -37,7 +38,18 @@ class Solution {
 
             if (c == ' ') {
                 if (sb.length() > 0) {
-                    words.add(new Word(sb.toString(), start, i - 1));
+                    int end = i - 1;
+
+                    Word word = new Word(sb.toString(), start, end);
+
+                    for (int j = start; j <= end; j++) {
+                        if (isSpoiler[j]) {
+                            word.spoiler = true;
+                            break;
+                        }
+                    }
+
+                    words.add(word);
                     sb = new StringBuilder();
                 }
 
@@ -49,42 +61,33 @@ class Solution {
 
         // 마지막 단어 처리
         if (sb.length() > 0) {
-            words.add(new Word(sb.toString(), start, len - 1));
-        }
+            int end = len - 1;
 
-        int answer = 0;
+            Word word = new Word(sb.toString(), start, end);
 
-         Set<String> normalWords = new HashSet<>();
-
-        for (Word word : words) {
-            boolean hasSpoilerChar = false;
-
-            for (int i=word.start; i<= word.end; i++) {
-                if (isSpoiler[i]) {
-                    hasSpoilerChar = true;
+            for (int j = start; j <= end; j++) {
+                if (isSpoiler[j]) {
+                    word.spoiler = true;
                     break;
                 }
             }
 
-            // 단어 전체가 스포 구간에 전혀 안 걸렸으면 일반 단어
-            if (!hasSpoilerChar) {
+            words.add(word);
+        }
+
+        Set<String> normalWords = new HashSet<>();
+
+        for (Word word : words) {
+            if (!word.spoiler) {
                 normalWords.add(word.word);
             }
         }
 
         Set<String> counted = new HashSet<>();
+        int answer = 0;
 
         for (Word word : words) {
-            boolean hasSpoilerChar = false;
-
-            for (int i=word.start; i<=word.end; i++) {
-                if (isSpoiler[i]) {
-                    hasSpoilerChar = true;
-                    break;
-                }
-            }
-
-            if (!hasSpoilerChar) {
+            if (!word.spoiler) {
                 continue;
             }
 
