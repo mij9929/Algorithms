@@ -35,7 +35,6 @@ class Solution {
             edges[i] = edge;
         }
         
-        System.out.println(Arrays.toString(edges));
         
         return kruskal(n, edges);
     }
@@ -43,7 +42,7 @@ class Solution {
     private int kruskal(int n, Edge[] edges) {
         int result = 0;
         int selectedEdgeCount = 0;
-        System.out.println(Arrays.toString(parent));
+
         Arrays.sort(edges, Comparator.comparingInt(edge -> edge.cost));
         
         for(Edge edge : edges) {
