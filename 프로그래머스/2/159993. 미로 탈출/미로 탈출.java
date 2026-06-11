@@ -1,78 +1,110 @@
 import java.util.*;
+
+class Node {
+    int x, y, d;
+    public Node(int x, int y, int d) {
+        this.x = x;
+        this.y = y;
+        this.d = d;
+    }
+}
+
 class Solution {
-    public static int[] dx = {0, 1, 0, -1};
-    public static int[] dy = {1, 0, -1, 0};
-    public static boolean[][][] visited;
+    String[] maps;
+    boolean[][] visited;
+    int n,m;
     
-    class Node{
-        int x;
-        int y;
-        int z;
-        int lever;
-        
-        public Node(int x, int y, int z, int lever){
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.lever = lever;
-        }
-    }
+    int[] dx = {0, 0, 1, -1};
+    int[] dy = {1, -1, 0, 0};
     
-    public int bfs(int startX, int startY, int n, int m, String[] maps){
-        int answer = -1;
-        Queue<Node> queue = new LinkedList<>();
-        queue.offer(new Node(startX, startY, 0, 0));
-        
-        while(!queue.isEmpty()){
-            Node now = queue.poll();
-    
-            if(maps[now.x].charAt(now.y) == 'E' && now.lever == 1){
-                answer = (answer == -1 ? now.z : (answer > now.z ? now.z : answer)); 
-            }
-            
-            for(int k=0; k<4; k++){
-                int x = now.x + dx[k];
-                int y = now.y + dy[k];
-                int z = now.z;
-                int lever = now.lever;
-                
-                if(x >= 0 && y >= 0 && x < n && y < m){
-                    if(!visited[x][y][lever] && maps[x].charAt(y) != 'X'){
-                        visited[x][y][lever] = true;
-                        if(maps[x].charAt(y) == 'L'){
-                            lever = 1;
-                            visited[x][y][lever] = true;
-                        }
-                        queue.offer(new Node(x,y,z+1,lever));
-                    }
-                }      
-            }
-        }
-        
-        return answer;
-    }
+    int[] leverPoint;
+    int[] exitPoint;
+    int[] startPoint;
     
     public int solution(String[] maps) {
         int answer = 0;
-        int n = maps.length;
-        int m = maps[0].length();
-        visited = new boolean[n][m][2];
-        int startX = 0;
-        int startY = 0;
+        n = maps.length;
+        m = maps[0].length();
+        visited = new boolean[n][m];
+        this.maps = maps;
         
-        for(int i=0; i<n; i++){
+        for(int i=0; i<n; i++) {
             for(int j=0; j<m; j++){
-                if(maps[i].charAt(j) == 'S'){
-                    startX = i;
-                    startY = j;
-                    break;
+                if(maps[i].charAt(j) == 'L') {
+                    leverPoint = new int[] {i, j};
+                }
+                
+                if(maps[i].charAt(j) == 'E') {
+                    exitPoint = new int[] {i, j};
+                }
+                
+                if(maps[i].charAt(j) == 'S') {
+                    startPoint = new int[] {i, j};
                 }
             }
         }
         
-        visited[startX][startY][0] = true;
-        answer = bfs(startX, startY, n, m, maps);
+        int lever = leverDfs(startPoint[0], startPoint[1]);
         
-        return answer;
+        visited = new boolean[n][m];
+        int exit = exitDfs(leverPoint[0], leverPoint[1]);
+        
+        if(lever != -1 && exit != -1) return exit + lever;
+
+        return -1;
+    }
+    
+    public int leverDfs(int x, int y) {
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.add(new Node(x, y, 0));
+        visited[x][y] = true;
+        
+        while(!queue.isEmpty()) {
+            Node now = queue.poll();
+            
+            if(now.x == leverPoint[0] && now.y == leverPoint[1]) return now.d;
+            
+            for(int k=0; k<4; k++) {
+                int nx = now.x + dx[k];
+                int ny = now.y + dy[k];
+                int nd = now.d + 1;
+                
+                if(nx>=0 && ny>=0 && nx < n && ny < m) {
+                    if(!visited[nx][ny] && maps[nx].charAt(ny)!= 'X') {
+                        visited[nx][ny] = true;
+                        queue.add(new Node(nx, ny, nd));
+                    }
+                }
+            }
+        }
+        
+        return -1;
+    }
+    
+    public int exitDfs(int x, int y) {
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.add(new Node(x, y, 0));
+        visited[x][y] = true;
+        
+        while(!queue.isEmpty()) {
+            Node now = queue.poll();
+            
+            if(now.x == exitPoint[0] && now.y == exitPoint[1]) return now.d;
+            
+            for(int k=0; k<4; k++) {
+                int nx = now.x + dx[k];
+                int ny = now.y + dy[k];
+                int nd = now.d + 1;
+                
+                if(nx>=0 && ny>=0 && nx < n && ny < m) {
+                    if(!visited[nx][ny] && maps[nx].charAt(ny)!= 'X') {
+                        visited[nx][ny] = true;
+                        queue.add(new Node(nx, ny, nd));
+                    }
+                }
+            }
+        }
+        
+        return -1;
     }
 }
