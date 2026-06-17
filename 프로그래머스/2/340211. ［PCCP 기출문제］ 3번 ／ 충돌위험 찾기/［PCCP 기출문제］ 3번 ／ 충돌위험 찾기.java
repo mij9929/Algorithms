@@ -42,6 +42,9 @@ class Solution {
         }
         
         // 충돌 파악
+        // map에 각 key(시간대)에서 중복되지 않는 새로운 리스트를 만듬
+        // 중복되지 않은 리스트를 다시 각 key에서 비교해서, 2번 이상이면 해당 시간에서 
+        // 같은 위치에 있는 로봇이 2대 이상이므로 충돌 위험 answer++
         for (Map.Entry<Integer, List<int[]>> entry : map.entrySet()) {
             List<int[]> list = new LinkedList<>();
             
