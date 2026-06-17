@@ -6,18 +6,9 @@ class Solution {
     
     public int[] parent;
     public int diff = 0;
-    public List<Integer>[] list;
     public int solution(int n, int[][] wires) {
         int answer = Integer.MAX_VALUE;
-        
-        list = new ArrayList[n+1];
-        parent = new int[n+1];
-        
-        for(int i=1; i<=n; i++) {
-            list[i] = new ArrayList<>();
-            parent[i] = i;
-        }
-        
+
         for(int i=0; i<wires.length; i++) {
             int[] newParent = new int[n+1];
             
