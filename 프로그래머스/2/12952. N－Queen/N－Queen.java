@@ -1,50 +1,58 @@
+import java.util.*;
+
 class Solution {
-    public static int[] arr;
-	public static int N;
-	public static int count = 0;
-    
-    public static void nQueen(int depth) {
-		// 모든 원소를 다 채운 상태면 count 증가 및 return 
-		if (depth == N) {
-			count++;
-			return;
-		}
- 
-		for (int i = 0; i < N; i++) {
-			arr[depth] = i;
-			// 놓을 수 있는 위치일 경우 재귀호출
-			if (Possibility(depth)) {
-				nQueen(depth + 1);
-			}
-		}
- 
-	}
- 
-	public static boolean Possibility(int col) {
- 
-		for (int i = 0; i < col; i++) {
-			// 해당 열의 행과 i열의 행이 일치할경우 (같은 행에 존재할 경우) 
-			if (arr[col] == arr[i]) {
-				return false;
-			} 
-			
-			/*
-			 * 대각선상에 놓여있는 경우
-			 * (열의 차와 행의 차가 같을 경우가 대각선에 놓여있는 경우다)
-			 */
-			else if (Math.abs(col - i) == Math.abs(arr[col] - arr[i])) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
+    public int[][] map;
+    public int cnt;
     
     public int solution(int n) {
-        N = n;
-        arr = new int[N];
-		nQueen(0);
-		System.out.println(count);
-        return count;
+        map = new int[n][n];
+        cnt = 0;
+        dfs(0, n);
+        return cnt;
+    }
+    
+    public void dfs(int depth, int n) {
+        if(depth == n){
+            cnt++;
+            return;
+        }
+        
+        for(int i=0; i<n; i++) {
+            if(map[depth][i] == 0) {
+                mark(1, depth, i, n);
+                dfs(depth+1, n);
+                mark(-1, depth, i, n);
+            }
+        }
+    }
+    
+    public void mark(int flag, int row, int col, int n) {
+        // 가로, 세로
+        for(int i=0; i<n; i++) {
+            map[row][i] += flag;
+            map[i][col] += flag;
+        }
+        
+        // 대각선
+        for(int i = 0; i < n; i++) {
+            if(row + i >= n || col + i >= n) break;
+            map[row + i][col+i] += flag;
+        }
+        
+        for(int i = 0; i < n; i++) {
+            if(row - i < 0 || col - i < 0) break;
+            map[row-i][col-i] += flag;
+        }
+        
+        for(int i = 0; i < n; i++) {
+            if(row - i < 0 || col + i >= n) break;
+            map[row - i][col+i] += flag;
+        }
+        
+        for(int i = 0; i < n; i++) {
+            if(row + i >= n || col - i < 0) break;
+            map[row + i][col - i] += flag;
+        }
+
     }
 }
