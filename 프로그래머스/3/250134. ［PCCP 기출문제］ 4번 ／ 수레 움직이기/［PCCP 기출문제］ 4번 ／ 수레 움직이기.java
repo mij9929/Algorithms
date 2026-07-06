@@ -1,55 +1,124 @@
 import java.util.*;
 
-class Node {
-    int x, y, v;
-    public Node(int x, int y, int v) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
 class Solution {
-    public static int[][] maze;
-    public static boolean[][][] visited;
-    public static int[] dx = {0, 0, 1, -1};
-    public static int[] dy = {1, -1, 0, 0};
-    public static int n,m;
+    int n,m;
+    int[][] maze;
     
-    public int bfs(int rx, int ry, int bx, int by) {
-        Queue<Node> rq = new ArrayDeque<>();
-        Queue<Node> bq = new ArrayDeque<>();
-        rq.offer(new Node(rx, ry, 0));
-        rq.offer(new Node(bx, by, 0));
-        
-        while(!rq.isEmpty() && !bq.isEmpty()) {
-            Node rNow = rq.poll();
-            Node bNow = bq.poll();
-            
-            if()
-        }
-    }
-
+    boolean[][] redVisited;
+    boolean[][] blueVisited;
+    
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, -1, 1};
+    
+    int answer;
+    
     public int solution(int[][] maze) {
         this.maze = maze;
         n = maze.length;
         m = maze[0].length;
-        visited = new boolean[n][m][2];
-        int[] rs = new int[2];
-        int[] bs = new int[2];
+        answer = Integer.MAX_VALUE;
+        redVisited = new boolean[n][m];
+        blueVisited = new boolean[n][m];
         
-       for(int i=0; i<n; i++) {
-           for(int j=0; j<m; j++) {
-               if(maze[i][j] == 1) {
-                   rs = new int[]{i, j};
-               } else if(maze[i][j] == 2) {
-                   bs = new int[]{i, j};
-               }
-           }
-       }
+        int redStartX = -1, redStartY = -1;
+        int blueStartX = -1 , blueStartY = -1;
         
-        bfs(rs[0], rs[1], bs[0], bs[1]);
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<m; j++) {
+                if(maze[i][j] == 1) {
+                    redStartX = i;
+                    redStartY = j;
+                }
+                
+                if(maze[i][j] == 2) {
+                    blueStartX = i;
+                    blueStartY = j;
+                }
+            }
+        }
         
-        int answer = 0;
+        redVisited[redStartX][redStartY] = true;
+        blueVisited[blueStartX][blueStartY] = true;
+        
+        
+        dfs(redStartX, redStartY, blueStartX, blueStartY, 0);
+        
+        if(answer == Integer.MAX_VALUE) return 0;
+        
         return answer;
+    }
+    
+    public void dfs(int redX, int redY, int blueX, int blueY, int depth) {
+        if(answer <= depth) return;
+        
+        if(isRedGoal(redX, redY) && isBlueGoal(blueX, blueY)) {
+            answer = Math.min(answer, depth);
+            return;
+        }
+        
+        List<int[]> redNextList = getNextPositions(redX, redY, true);
+        List<int[]> blueNextList = getNextPositions(blueX, blueY, false);
+        
+        for(int[] redNext : redNextList) {
+            int redNextX = redNext[0];
+            int redNextY = redNext[1];
+            for(int[] blueNext : blueNextList) {
+                int blueNextX = blueNext[0];
+                int blueNextY = blueNext[1];
+                
+                if(redNextX == blueNextX && redNextY == blueNextY) continue;
+                
+                if(redNextX == blueX && redNextY == blueY && blueNextX == redX && blueNextY == redY) continue;
+                
+                boolean redMoved = !isRedGoal(redX, redY);
+                boolean blueMoved = !isBlueGoal(blueX, blueY);
+                
+                if(redMoved) redVisited[redNextX][redNextY] = true;
+                if(blueMoved) blueVisited[blueNextX][blueNextY] = true;
+                
+                dfs(redNextX, redNextY, blueNextX, blueNextY, depth + 1);
+                
+                if(redMoved) redVisited[redNextX][redNextY] = false;
+                if(blueMoved) blueVisited[blueNextX][blueNextY] = false;
+                
+            }
+        }
+    }
+    
+    public boolean isRedGoal(int redX, int redY) {
+        return maze[redX][redY] == 3;
+    }
+    
+    public boolean isBlueGoal(int blueX, int blueY) {
+        return maze[blueX][blueY] == 4;
+    }
+    
+    public List<int[]> getNextPositions(int x, int y, boolean isRed) {
+        List<int[]> result = new ArrayList<>();
+        
+        if(isRed && isRedGoal(x, y)) {
+            result.add(new int[] {x,y});
+            return result;
+        }
+        
+        if(!isRed && isBlueGoal(x, y)) {
+            result.add(new int[] {x,y});
+            return result;
+        }
+        
+        boolean[][] visited = isRed ? redVisited : blueVisited;
+        
+        for(int i=0; i<4; i++) {
+            int nextX = x + dx[i];
+            int nextY = y + dy[i];
+            
+            if(nextX >=0 && nextX < n && nextY >=0 && nextY < m) {
+                if(!visited[nextX][nextY] && maze[nextX][nextY] != 5) {
+                    result.add(new int[] {nextX, nextY});
+                }
+            }
+        }
+        
+        return result;
     }
 }
