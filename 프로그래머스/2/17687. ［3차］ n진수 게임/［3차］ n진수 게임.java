@@ -6,7 +6,7 @@ class Solution {
         StringBuilder sb = new StringBuilder();
         
         for(int i=0; i<t*m; i++) {
-            String c = String.valueOf(Integer.toString(i, n)).toUpperCase();
+            String c = Integer.toString(i, n).toUpperCase();
             sb.append(c);
         }
         
