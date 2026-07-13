@@ -10,8 +10,8 @@ class Solution {
         Arrays.fill(result, true);
         
         for(int time=0; time<endDay; time++) {
-            int toDay = time + startday;
-            if(toDay % 7 == 6 || toDay == 7) continue;
+            int toDay = (time + startday - 1) % 7 + 1;
+            if(toDay == 6 || toDay == 7) continue;
             
             for(int i=0; i<employNums; i++) {
                 if(!result[i]) continue;
