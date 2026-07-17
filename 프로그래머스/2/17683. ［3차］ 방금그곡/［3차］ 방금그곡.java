@@ -1,13 +1,11 @@
 import java.util.*;
 class MusicInfo {
     String name;
-    String melody;
     int playTime;
     int idx;
     
-    public MusicInfo(String name, String melody, int playTime, int idx) {
+    public MusicInfo(String name, int playTime, int idx) {
         this.name = name;
-        this.melody = melody;
         this.playTime = playTime;
         this.idx = idx;
     }
@@ -20,7 +18,6 @@ class Solution {
             else return Integer.compare(a.idx, b.idx);
         });
         
-        int mLen = m.length();
         for(int i=0; i<musicinfos.length; i++) {
             String[] musicInfo = musicinfos[i].split(",");
             int playTime = getPlayTime(musicInfo[0], musicInfo[1]);
@@ -36,7 +33,7 @@ class Solution {
             String melody = sb.toString();
             
             if(melody.contains(m)) {
-                MusicInfo info = new MusicInfo(name, melody, playTime, i);
+                MusicInfo info = new MusicInfo(name, playTime, i);
                 pq.offer(info);
             }      
         }
